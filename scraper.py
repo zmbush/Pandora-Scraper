@@ -80,7 +80,7 @@ def scrape():
       t.link(filename)
       # audioFile = eyeD3.Mp3AudioFile(filename)
       # waitTime = audioFile.getPlayTime() / 2
-      t.header.setVersion(eyeD3.ID3_V2_3)
+      t.header.setVersion(eyeD3.ID3_V2_4)
       t.setArtist(song.artist)
       t.setAlbum(song.album)
       t.setTitle(song.title)
