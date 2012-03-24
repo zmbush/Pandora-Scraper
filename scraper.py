@@ -6,12 +6,20 @@ import time
 import eyeD3
 import sys
 import random
+import commands
+import curses
 
 def maxWidth(string, width):
   if len(string) <= width:
     return string
   else:
     return string[:width-3] + '...'
+
+def getDims():
+  w = curses.initscr()
+  retval = w.getmaxyx()
+  curses.endwin()
+  return retval
 
 def scrape():
   pandora_connection = pandora.make_pandora()
@@ -55,9 +63,17 @@ def scrape():
 
     for song in songs:
       song_count += 1
-      print u"[{:3d}]: {:>30} by {:<30}".format(song_count, 
-                                                maxWidth(song.title, 30), 
-                                                maxWidth(song.artist, 30))
+      dims = getDims()
+      columns = dims[1]
+      print "Columns:", columns
+      columns -= 1 + 3 + 3 + 4
+      artist = columns / 2
+      remain = columns % 2
+      title = artist + remain
+      print (u"[{:3d}]: {:.>%d} by {:.<%d}" % (title, artist)).format(
+                                                song_count, 
+                                                maxWidth(song.title, title), 
+                                                maxWidth(song.artist, artist))
       filename = os.getenv("HOME") + "/Music/"
       filename +=  song.artist.replace('/', '\\')
       try:
