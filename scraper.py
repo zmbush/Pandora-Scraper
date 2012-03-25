@@ -65,15 +65,18 @@ def scrape():
       song_count += 1
       dims = getDims()
       columns = dims[1]
-      print "Columns:", columns
-      columns -= 1 + 3 + 3 + 4
-      artist = columns / 2
-      remain = columns % 2
-      title = artist + remain
-      print (u"[{:3d}]: {:.>%d} by {:.<%d}" % (title, artist)).format(
+      titleReserve = 10
+      columns -= 1 + 3 + 2 + titleReserve
+      artist = columns / 3
+      album = artist
+      remain = columns % 3
+      title = artist + remain + titleReserve
+      print (u"[{:3d}]:{:-^%d}{:-^%d}{:-^%d}" % (title, artist, album))  \
+                                                .format(
                                                 song_count, 
                                                 maxWidth(song.title, title), 
-                                                maxWidth(song.artist, artist))
+                                                maxWidth(song.artist, artist),
+                                                maxWidth(song.album, album))
       filename = os.getenv("HOME") + "/Music/"
       filename +=  song.artist.replace('/', '\\')
       try:
@@ -112,13 +115,13 @@ def scrape():
         print "Unable to download album art"
       t.update()
       seconds = random.randint(60, 120)
-      sys.stdout.write("Waiting for %d seconds" % seconds)
+      # sys.stdout.write("Waiting for %d seconds" % seconds)
       sys.stdout.flush()
       waitTime = seconds
-      while waitTime > 0:
-        time.sleep(1)
-        waitTime -= 1
-        sys.stdout.write('.')
+      while waitTime >= 5:
+        time.sleep(5)
+        waitTime -= 5
+        # sys.stdout.write('.')
         sys.stdout.flush()
-      print
-
+      time.sleep(waitTime)
+      # print
